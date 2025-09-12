@@ -19,15 +19,22 @@ destinations = {
             "walk down Main Street for 10 minutes and you'll see the train station.",
             "Take the bus to Central Ave and walk 2 minutes."
         ],
-        "cafe":[
-            "There's a cafe around the corner on 5th Street",
-            "Head east for 3 minutea and you'll find a cozy cafe."
+        "cafe":{
+            "walking": ["There's a cafe around the corner on 5th Street"],
+            "driving": ["Head east for 3 minutea and you'll find a cozy cafe."]
         
-        ],
-        "park":[
+        },
+        "park":{
+            "walking": [
             "The park is just behind the library",
             "Go straight and you'll see the park on your left."
-        ],
+            ],
+            "driving": [
+                "Drive straight for 2 minutes and paek nearby.",
+                "Take Main Street, it's about 3 minutes by car."
+            ]
+        },
+        
         "cinema":[
             "Take the subway to Central Station, then walk 5 minutes.",
             "Drive straight for 1o minutes and it's on your right."
@@ -40,16 +47,27 @@ while True:
     if any(word in user_input for word in ["exit", "quit", "leave"]):
         print("Bot: Goodbye! Safe travels 🚀")
         break
-    
-    # check for keywords in destinations
     found = False
     for key in destinations:
         if key in user_input:
-            print("Bot:", random.choice(destinations[key]))
-            found = True
-            break
-    if not found:
-         print("Bot: Sorry, I don't know how to get there yet.")
+            directions = destinations[key]
+    
+        # Check if the destination has walking/driving options
+    if isinstance(directions, dict):
+         mode = input("Bot: Do you want walking or driving directions? ").lower()
+         if mode in directions:
+            print("Bot:", random.choice(directions[mode]))
+         else:
+             print("Bot: Sorry, I can only give walking or driving directions.")
+    else:
+        # Simple list, no walking/driving distinction
+         print("Bot:", random.choice(directions))
+            
+    found = True
+    break
+
+if not found:
+     print("Bot: Sorry, I don’t know how to get there yet.")
          
             
 
