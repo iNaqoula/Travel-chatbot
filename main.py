@@ -1,10 +1,9 @@
-# Smarter travel chatbot with flexible exit
-
 import random
 
-print("Hello! I’m your travel bot. Type 'exit' or 'quit' anytime to leave.")
-
 #dictionary with destinations and multiple possible directions
+
+EXIT_WORDS = ["exit", "quit", "leave"]
+
 destinations = { 
         "library" : [
             "go straight and turn left at the first street." ,
@@ -40,34 +39,52 @@ destinations = {
             "Drive straight for 1o minutes and it's on your right."
         ]
     }
-while True:
-    user_input = input("You: ").lower()  # convert to lowercase
 
-    # check if any exit word is anywhere in the input
-    if any(word in user_input for word in ["exit", "quit", "leave"]):
-        print("Bot: Goodbye! Safe travels 🚀")
-        break
-    found = False
+def find_destinations(user_input, destinations):
+    """
+    return a destination key form destinations that mattches user input
+    (substring match) or none if no destination found.
+    """
+    ui = user_input.lower()
     for key in destinations:
-        if key in user_input:
-            directions = destinations[key]
-    
-        # Check if the destination has walking/driving options
-    if isinstance(directions, dict):
-         mode = input("Bot: Do you want walking or driving directions? ").lower()
-         if mode in directions:
-            print("Bot:", random.choice(directions[mode]))
-         else:
-             print("Bot: Sorry, I can only give walking or driving directions.")
-    else:
-        # Simple list, no walking/driving distinction
-         print("Bot:", random.choice(directions))
-            
-    found = True
-    break
+        if key in ui:
+            return key
+    return None
 
-if not found:
-     print("Bot: Sorry, I don’t know how to get there yet.")
+def get_directions(dest_key, mode=None):
+    directions = destinations[dest_key]
+    if isinstance(directions,dict):
+        if mode is None:
+            mode = input("Bot:Do you want walking or driving directions? ").lower()
+        if mode in directions :
+            return random.choice(directions["walking"])
+        first_list = next(iter(directions.values()))
+        return random.choice(first_list)
+    return random.choice(directions)
+
+                 
+def main():
+    
+    print("Hello! I’m your travel bot. Type 'exit' or 'quit' anytime to leave.")
+
+
+    while True:
+     user_input = input("You: ").lower()  # convert to lowercase
+     if any(w in user_input.lower() for w in EXIT_WORDS):
+         print("Bot: Goodbye! safe Travels")
+         break
+     dest_key = find_destinations(user_input,destinations)
+     if dest_key:
+         response = get_directions(dest_key)
+         print("Bot:", response)
+     else:
+        print("Bot: Sorry :(, I don't know how to get there yet.")
+        
+        
+if __name__ == "__main__":
+    main()
+           
+    
          
             
 
