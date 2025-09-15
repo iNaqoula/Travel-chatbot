@@ -35,3 +35,10 @@ destinations = {
             "Drive straight for 1o minutes and it's on your right."
         ]
     }
+# dictionary with synonyms for multiple destinations
+destination_synonyms = {
+    "train station" : ["station", "train", "railway"],
+    "supermarket" : ["market", "grocery store","grocery"],
+    "library" : ["bookshop", "reading room"],
+    "cafe": ["coffee shop"]
+}

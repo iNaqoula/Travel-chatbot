@@ -1,5 +1,5 @@
 from data import EXIT_WORDS, destinations
-from bot_logic import find_destinations, get_directions
+from bot_logic import find_destinations, get_directions, correct_destinations
 
 
                  
@@ -14,6 +14,8 @@ def main():
          print("Bot: Goodbye! safe Travels")
          break
      dest_key = find_destinations(user_input,destinations)
+     if not dest_key:
+         dest_key = correct_destinations(user_input)
      if dest_key:
          response = get_directions(dest_key)
          print("Bot:", response)
