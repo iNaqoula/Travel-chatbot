@@ -32,15 +32,15 @@ def find_destinations(user_input, destinations):
         
     return None
 
-def correct_destinations(user_input):
+def correct_destinations(user_input, destinations ):
     #find the closest destination key to the user's input
-    ui = user_input.lower()
-    keys = list(destinations.keys())
-    #get the closest match
-    closest = difflib.get_close_matches(ui, all_keywords, n=1 , cutoff=0.6)
-    if closest:
-        return synonym_map[closest[0]]
+    words = user_input.lower().split()
+    for word in words:
+        close = difflib.get_close_matches(word, destinations.keys(), n=1, cutoff=0.7)
+        if close:
+            return close[0]
     return None
+   
 
 def get_directions(dest_key, mode=None):
     # function to get the destinations both if defined or not
@@ -48,8 +48,19 @@ def get_directions(dest_key, mode=None):
     if isinstance(directions,dict):
         if mode is None:
             mode = input("Bot:Do you want walking or driving directions? ").lower()
+        
         if mode in directions :
-            return random.choice(directions["walking"])
-        first_list = next(iter(directions.values()))
-        return random.choice(first_list)
+            return random.choice(directions[mode])
+       
+        else:
+           
+            if "walking" in directions:
+                print("Bot: I can't do that yet, but here's the walking directions: ")
+                return random.choice(directions["walking"])
+           
+            else:
+                 first_list = next(iter(directions.values()))
+                 print("Bot: I can't do that yet, here's the closest option I found")
+                 return random.choice(first_list)
+   
     return random.choice(directions)
